@@ -14,5 +14,4 @@ def plot_nucleotide_frequencies(counts):
     plt.ylim(0, 100)
     for i, v in enumerate(freqs):
         plt.text(i, v + 1, f"{v:.2f}%", ha='center')
-
     plt.show(block=False)

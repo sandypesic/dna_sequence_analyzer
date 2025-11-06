@@ -5,29 +5,37 @@ from visualize import plot_nucleotide_frequencies
 
 def main():
     while True:
-        input_sequence = input("Enter a DNA sequence: ")
-        seq = clean_sequence(input_sequence)
-        counts = count_nucleotides(seq)
-        total_length = sum(counts.values())
-
-        if total_length == 0:
-            print("No valid nucleotides found in the input sequence.")
-        else:
+        seq = input("Enter a DNA sequence (or type 'end' to quit): ").strip()
+        if seq.lower() == "end" or seq == "":
+            print("Goodbye!")
             break
-    
+
+        analyze_sequence(seq)
+
+
+def analyze_sequence(seq):
+    seq = clean_sequence(seq)
+    counts = count_nucleotides(seq)
+    total_length = sum(counts.values())
+
+    if total_length == 0:
+        print("No valid nucleotides found in the input sequence.")
+        return
+
     gc_content = calculate_gc_content(counts)
     at_content = calculate_at_content(counts)
-    complement_seq = get_complement(seq)
-    reverse_complement_seq = get_reverse_complement(seq)
-    
-    print(f"\n=== DNA Sequence Analysis ===")
+
+    print("\n=== DNA Sequence Analysis ===")
     print(f"Sequence length: {total_length}")
     for base in "ATCG":
         print(f"{base} count: {counts[base]}")
     print(f"GC content: {gc_content:.2f}%")
     print(f"AT content: {at_content:.2f}%")
-    print(f"Complement: {complement_seq}")
-    print(f"Reverse complement: {reverse_complement_seq}")
+
+    complement = get_complement(seq)
+    reverse_complement = get_reverse_complement(seq)
+    print(f"Complement: {complement}")
+    print(f"Reverse complement: {reverse_complement}")
 
     plot_nucleotide_frequencies(counts)
 

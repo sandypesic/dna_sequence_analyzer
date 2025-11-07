@@ -63,9 +63,9 @@ def save_to_csv(results, filename="dna_analysis_results.csv"):
             if not file_exists:
                 writer.writeheader()
             writer.writerows(results)
-        print(f"\nResults saved to '{filename}'")
+        print(f"\nResults saved to '{filename}'.")
     except Exception as e:
-        print(f"Error saving to CSV: {e}")
+        print(f"Error saving to CSV: '{e}'.")
 
 
 def main():

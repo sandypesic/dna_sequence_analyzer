@@ -19,11 +19,12 @@ def main():
             break
 
         batch_results = []  # Store analysis results for this batch
+        is_manual_input = False  # Mark batch as non-manual input
 
         # FASTA file input
         if user_input.lower().endswith(('.fasta', '.fa')):
             if not os.path.isfile(user_input):
-                print(f"\nError: File '{user_input}' does not exist.")
+                print(f"\nFile '{user_input}' does not exist.")
                 continue
 
             fasta_data = read_fasta(user_input)
@@ -39,19 +40,22 @@ def main():
 
         # Manual sequence input
         else:
-            # Ask for a name for this sequence
-            label = input("\nEnter a name for this sequence (or press Enter for 'Sequence'): ").strip()
-            if not label:
-                label = "Sequence"
-
-            result = analyze_sequence(user_input, label=label)
-            if result:
-                batch_results.append(result)
+            is_manual_input = True  # Mark batch as manual input
+            result = analyze_sequence(user_input)
+            if not result:
+                continue
+            batch_results.append(result)
 
         # Offer to save batch results to CSV
         if batch_results:
             save_choice = input("\nSave results to CSV? (y/n): ").strip().lower()
             if save_choice == "y":
+
+                # Ask for name only if input is manually entered
+                if is_manual_input:
+                    label = input("\nEnter a name for this sequence (or press Enter for 'Sequence'): ").strip()
+                    batch_results[0]["Label"] = label if label else "Sequence"
+                    
                 save_to_csv(batch_results)
 
 
